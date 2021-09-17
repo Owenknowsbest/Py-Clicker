@@ -107,7 +107,6 @@ class App(Tk):
                 self.saveData = data
                 if data["saveVer"] == self.saveVer:
                     self.cookies = data["cookies"]
-                    self.update_cookie_count()
                     self.upgrades = data["upgrades"]
                     self.upgradeCosts = data["upgradeCosts"]
         # Save Tab
@@ -125,22 +124,24 @@ class App(Tk):
                 label.grid(row=self.row, column=0, columnspan=2)
                 self.row += 1
         # Upgrades Tab
-        Label(self.UpgradesTab)
+        self.UpgradeCookiesCounter = Label(self.UpgradesTab, text="0 cookies")
+        self.UpgradeCookiesCounter.grid(row=0, column=0)
         self.UpgradeClicker = Button(self.UpgradesTab,
                                      text='Buy Clicker ({:d} cookies) {:d}'.format(self.upgradeCosts[0],
                                                                                    self.upgrades[0]),
                                      command=self.upgrade_clicker_buy)
-        self.UpgradeClicker.grid(row=0, column=0)
+        self.UpgradeClicker.grid(row=1, column=0)
         self.UpgradeAmount = Button(self.UpgradesTab,
                                     text='Buy Better Equipment ({:d} cookies) {:d}'.format(self.upgradeCosts[1],
                                                                                       self.upgrades[1]),
                                     command=lambda: self.buy_upgrade(1, self.UpgradeAmount,
                                                                      "Buy Better Equipment "))
-        self.UpgradeAmount.grid(row=1, column=0)
+        self.UpgradeAmount.grid(row=2, column=0)
         for i in range(len(self.upgrades)):
             if i == 0:
                 for j in range(self.upgrades[i]):
                     self.after(10000, self.do_click_upgrade_better)
+        self.update_cookie_count()
 
     def click(self):
         self.cookies += self.upgrades[1] + 1
@@ -162,10 +163,12 @@ class App(Tk):
             self.update_cookie_count()
             self.upgrades[upgrade] += 1
             self.upgradeCosts[upgrade] += self.upgrades[upgrade] * 2
-            button.config(text=button_format+'({:d} cookies) {:d}'.format(self.upgradeCosts[upgrade], self.upgrades[upgrade]))
+            button.config(text=button_format+'({:d} cookies) {:d}'.format(self.upgradeCosts[upgrade],
+                                                                          self.upgrades[upgrade]))
 
     def update_cookie_count(self):
         self.CookiesCounter.config(text='{:d} cookies'.format(self.cookies))
+        self.UpgradeCookiesCounter.config(text='{:d} cookies'.format(self.cookies))
 
     def do_click_upgrade_better(self):
         self.click()
