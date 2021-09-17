@@ -161,7 +161,7 @@ class App(Tk):
             self.cookies -= self.upgradeCosts[upgrade]
             self.update_cookie_count()
             self.upgrades[upgrade] += 1
-            self.upgradeCosts[upgrade] += self.upgrades[upgrade]
+            self.upgradeCosts[upgrade] += self.upgrades[upgrade] * 2
             button.config(text=button_format+'({:d} cookies) {:d}'.format(self.upgradeCosts[upgrade], self.upgrades[upgrade]))
 
     def update_cookie_count(self):
